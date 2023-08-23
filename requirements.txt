@@ -1,2 +1,4 @@
 bs4 >= 0.0.1
 requests >= 2.0.0
+beautifulsoup4~=4.12.2
+urllib3~=2.0.4

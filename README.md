@@ -1,7 +1,10 @@
-<p align="center">   
- <img src="images/logo.png" height="200"><br/>
+<p align="center">
 A powerful XSS scanner made in python 3.7<br/>
 
+## Notes
+
+In the Terminal output a lot of duplicates. I removed duplicates and stored them in
+the json file. 
 
 ## Installing 
 
@@ -50,10 +53,6 @@ python3 pwnxss.py --help
 * ETC....
 
 
-## Screenshot
-
-<img src="images/screenshot.png">
-
 ## Roadmap
 
 v0.3B:
@@ -78,4 +77,3 @@ v0.5 Release (Final):
 * Sorry for my bad english 
 * if you run pwnxss on the win10 terminal you will get an untidy output
 * now it doesn't support DOM
-

