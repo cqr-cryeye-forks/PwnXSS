@@ -3,6 +3,7 @@ from urllib.parse import urljoin, urlparse, parse_qs, urlencode
 from Log import *
 from paths import TEMP_PATH_FOR_DATA
 from payload_generator import generate_payloads_for_dirs, generate_payloads_for_params
+from xss_validator import check_payload_in_script_tag
 import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -35,6 +36,7 @@ class Core:
         test = None
         query = urlparse(url).query
 
+        # For directories
         if query == "":
             payloads = generate_payloads_for_dirs()
 
@@ -49,11 +51,10 @@ class Core:
                     test = url + "/" + payload
 
                 try:
-
                     response = session_get.get(test, verify=False)
+                    if check_payload_in_script_tag(response.text, payload):
 
-                    if payload in response.text or payload in session_get.get(test).text:
-                        Log.high("Detected XSS (GET) at " + response.url)
+                        Log.high("Detected XSS (GET) in Script Tag at " + response.url)
 
                         with open(TEMP_PATH_FOR_DATA, "a") as file:
                             file.write(json.dumps({"url_xss": response.url, "method": "GET", "data": payload}) + "\n")
@@ -61,6 +62,7 @@ class Core:
                 except Exception as e:
                     Log.info(f"Connection Error with GET method for URL: {test} --> {e}")
 
+        # For params
         if query != "":
             payloads = generate_payloads_for_params()
             for payload in payloads:
@@ -76,15 +78,29 @@ class Core:
 
                     try:
                         response = session_get.get(test, verify=False)
+                        if check_payload_in_script_tag(response.text, payload):
 
-                        if payload in response.text or payload in session_get.get(query_all).text:
                             Log.high("Detected XSS (GET) at " + response.url)
 
                             with open(TEMP_PATH_FOR_DATA, "a") as file:
-                                file.write(json.dumps({"url_xss": response.url, "method": "GET",  "data": payload}) + "\n")
+                                file.write(
+                                    json.dumps({"url_xss": response.url, "method": "GET", "data": payload}) + "\n")
 
                     except Exception as e:
                         Log.info(f"Connection Error with GET method for URL: {test} --> {e}")
+
+                    try:
+                        response_query_all = session_get.get(query_all, verify=False)
+                        if check_payload_in_script_tag(response_query_all.text, payload):
+
+                            Log.high("Detected XSS (GET) at " + response_query_all.url)
+
+                            with open(TEMP_PATH_FOR_DATA, "a") as file:
+                                file.write(
+                                    json.dumps({"url_xss": response_query_all.url, "method": "GET", "data": payload}) + "\n")
+
+                    except Exception as e:
+                        Log.info(f"Connection Error with GET method for URL: {query_all} --> {e}")
 
     @staticmethod
     def get_method_form(url, session_get):
@@ -132,7 +148,7 @@ class Core:
 
                             req = session_get.get(urljoin(url, action), params=keys)
 
-                            if payload in req.text:
+                            if check_payload_in_script_tag(req.text, payload):
                                 Log.high("Detected XSS (GET) at " + urljoin(url, req.url))
                                 Log.high("GET data: " + str(keys))
 
@@ -185,7 +201,7 @@ class Core:
                         try:
                             req = session_get.post(urljoin(url, action), data=keys)
 
-                            if payload in req.text:
+                            if check_payload_in_script_tag(req.text, payload):
                                 Log.high("Detected XSS (POST) at " + urljoin(url, req.url))
                                 Log.high("Post data: " + str(keys))
 
