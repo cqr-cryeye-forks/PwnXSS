@@ -15,7 +15,7 @@ class Core:
         Log.info("Checking connection to: " + Y + url)
 
         try:
-            response = session_get.get(url, timeout=15)
+            response = session_get.get(url, timeout=30)
 
         except Exception as e:
             Log.high("Internal error: " + str(e))

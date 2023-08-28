@@ -7,33 +7,37 @@ from multiprocessing import Process
 class Crawler:
     visited = []
 
-    def getLinks(self, base, session_get):
+    @staticmethod
+    def get_links(base, session_get):
         lst = []
 
         text = session_get.get(base).text
         isi = BeautifulSoup(text, "html.parser")
+        list_of_links_from_base_url = isi.find_all("a", href=True)
 
-        for obj in isi.find_all("a", href=True):
+        for obj in list_of_links_from_base_url:
             url = obj["href"]
+            full_link = urljoin(base, url)
 
-            if urljoin(base, url) in self.visited:
+            if full_link in Crawler.visited:
                 continue
 
             elif url.startswith("mailto:") or url.startswith("javascript:"):
                 continue
-            # :// will check if there is any subdomain or any other domain, but it will pass directory
+            # Pass only base url or directory, not other domains or subdomains
             elif url.startswith(base) or "://" not in url:
-                lst.append(urljoin(base, url))
-                self.visited.append(urljoin(base, url))
+                # TODO: debug this
+                lst.append(full_link)
+                Crawler.visited.append(full_link)
 
         return lst
 
     def crawl(self, base, depth, session_get):
 
-        urls = self.getLinks(base, session_get)
+        urls = self.get_links(base, session_get)
 
         for url in urls:
-            if url.startswith("https://") or url.startswith("http://"):
+            if url.startswith("http"):
 
                 if Core.check_connection(url, session_get):
                     tasks = []
@@ -44,15 +48,14 @@ class Crawler:
                     p_post = Process(target=Core.post_method(url, session_get))
                     tasks.append(p_post)
 
-                    p_else = Process(target=Core.get_method(url, session_get))
+                    p_else = Process(target=Core.get_method_form(url, session_get))
                     tasks.append(p_else)
 
                     for p in tasks:
                         p.start()
                         p.join()
-
-                else:
-                    continue
+                # else:
+                #     continue
 
                 if depth != 0:
                     self.crawl(url, depth - 1, session_get)
