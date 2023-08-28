@@ -88,108 +88,113 @@ class Core:
 
     @staticmethod
     def get_method_form(url, session_get):
-        response_body = session_get.get(url, verify=False).text
+        try:
+            response_body = session_get.get(url, verify=False).text
 
-        bsObj = BeautifulSoup(response_body, "html.parser")
-        forms = bsObj.find_all("form", method=True)
+            bsObj = BeautifulSoup(response_body, "html.parser")
+            forms = bsObj.find_all("form", method=True)
 
-        for form in forms:
-            try:
-                action = form["action"]
-            except KeyError:
-                action = url
+            for form in forms:
+                try:
+                    action = form["action"]
+                except KeyError:
+                    action = url
 
-            if form["method"].lower().strip() == "get":
-                Log.warning("Target have form with GET method: " + C + urljoin(url, action))
-                Log.info("Collecting form input key.....")
+                if form["method"].lower().strip() == "get":
+                    Log.warning("Target have form with GET method: " + C + urljoin(url, action))
+                    Log.info("Collecting form input key.....")
 
-                payloads = generate_payloads_for_dirs() + generate_payloads_for_params()
+                    payloads = generate_payloads_for_dirs() + generate_payloads_for_params()
 
-                for payload in payloads:
-                    keys = {}
-                    for key in form.find_all(["input", "textarea"]):
+                    for payload in payloads:
+                        keys = {}
+                        for key in form.find_all(["input", "textarea"]):
+                            try:
+                                if key["type"] == "submit":
+                                    Log.info("Form key name: " + G + key["name"] + N + " value: " + G + "<Submit Confirm>")
+                                    keys.update({key["name"]: key["name"]})
+
+                                else:
+                                    Log.info("Form key name: " + G + key["name"] + N + " value: " + G + payload)
+                                    keys.update({key["name"]: payload})
+
+                            except Exception as e:
+                                Log.info("Internal error: " + str(e))
+                                try:
+                                    Log.info("Form key name: " + G + key["name"] + N + " value: " + G + payload)
+                                    keys.update({key["name"]: payload})
+                                except KeyError as e:
+                                    Log.info("Internal error: " + str(e))
+
+                        Log.info("Sending payload (GET) method...")
+
                         try:
-                            if key["type"] == "submit":
-                                Log.info("Form key name: " + G + key["name"] + N + " value: " + G + "<Submit Confirm>")
-                                keys.update({key["name"]: key["name"]})
 
-                            else:
-                                Log.info("Form key name: " + G + key["name"] + N + " value: " + G + payload)
-                                keys.update({key["name"]: payload})
+                            req = session_get.get(urljoin(url, action), params=keys)
+
+                            if payload in req.text:
+                                Log.high("Detected XSS (GET) at " + urljoin(url, req.url))
+                                Log.high("GET data: " + str(keys))
+
+                                with open(TEMP_PATH_FOR_DATA, "a") as file:
+                                    file.write(json.dumps({"url_xss": req.url, "method": "GET", "data": str(keys)}) + "\n")
 
                         except Exception as e:
-                            Log.info("Internal error: " + str(e))
-                            try:
-                                Log.info("Form key name: " + G + key["name"] + N + " value: " + G + payload)
-                                keys.update({key["name"]: payload})
-                            except KeyError as e:
-                                Log.info("Internal error: " + str(e))
+                            Log.info(f"Connection Error with GET form method for URL: {urljoin(url, action)} --> {e}")
 
-                    Log.info("Sending payload (GET) method...")
-
-                    try:
-
-                        req = session_get.get(urljoin(url, action), params=keys)
-
-                        if payload in req.text:
-                            Log.high("Detected XSS (GET) at " + urljoin(url, req.url))
-                            Log.high("GET data: " + str(keys))
-
-                            with open(TEMP_PATH_FOR_DATA, "a") as file:
-                                file.write(json.dumps({"url_xss": req.url, "method": "GET", "data": str(keys)}) + "\n")
-
-                    except Exception as e:
-                        Log.info(f"Connection Error with GET form method for URL: {urljoin(url, action)} --> {e}")
+        except Exception as e:
+            Log.info("Internal error: " + str(e))
 
     @staticmethod
     def post_method(url, session_get):
-        response_body = session_get.get(url, verify=False).text
+        try:
+            response_body = session_get.get(url, verify=False).text
+            bsObj = BeautifulSoup(response_body, "html.parser")
+            forms = bsObj.find_all("form", method=True)
 
-        bsObj = BeautifulSoup(response_body, "html.parser")
-        forms = bsObj.find_all("form", method=True)
+            for form in forms:
+                try:
+                    action = form["action"]
+                except KeyError:
+                    action = url
 
-        for form in forms:
-            try:
-                action = form["action"]
-            except KeyError:
-                action = url
+                if form["method"].lower().strip() == "post":
+                    Log.warning("Target have form with POST method: " + C + urljoin(url, action))
+                    Log.info("Collecting form input key.....")
 
-            if form["method"].lower().strip() == "post":
-                Log.warning("Target have form with POST method: " + C + urljoin(url, action))
-                Log.info("Collecting form input key.....")
+                    payloads = generate_payloads_for_params()
 
-                payloads = generate_payloads_for_params()
+                    for payload in payloads:
 
-                for payload in payloads:
+                        keys = {}
+                        for key in form.find_all(["input", "textarea"]):
+                            try:
+                                if key["type"] == "submit":
+                                    Log.info("Form key name: " + G + key["name"] + N + " value: " + G + "<Submit Confirm>")
+                                    keys.update({key["name"]: key["name"]})
 
-                    keys = {}
-                    for key in form.find_all(["input", "textarea"]):
+                                else:
+                                    Log.info("Form key name: " + G + key["name"] + N + " value: " + G + payload)
+                                    keys.update({key["name"]: payload})
+
+                            except Exception as e:
+                                Log.info("Internal error: " + str(e))
+
+                        Log.info("Sending payload (POST) method...")
+
                         try:
-                            if key["type"] == "submit":
-                                Log.info("Form key name: " + G + key["name"] + N + " value: " + G + "<Submit Confirm>")
-                                keys.update({key["name"]: key["name"]})
+                            req = session_get.post(urljoin(url, action), data=keys)
 
-                            else:
-                                Log.info("Form key name: " + G + key["name"] + N + " value: " + G + payload)
-                                keys.update({key["name"]: payload})
+                            if payload in req.text:
+                                Log.high("Detected XSS (POST) at " + urljoin(url, req.url))
+                                Log.high("Post data: " + str(keys))
+
+                                with open(TEMP_PATH_FOR_DATA, "a") as file:
+                                    file.write(json.dumps({"url_xss": req.url, "method": "POST", "data": str(keys)}) + "\n")
 
                         except Exception as e:
-                            Log.info("Internal error: " + str(e))
+                            Log.info(f"Connection Error with POST method for URL: {urljoin(url, action)} --> {e}")
 
-                    Log.info("Sending payload (POST) method...")
-
-                    try:
-                        req = session_get.post(urljoin(url, action), data=keys)
-
-                        if payload in req.text:
-                            Log.high("Detected XSS (POST) at " + urljoin(url, req.url))
-                            Log.high("Post data: " + str(keys))
-
-                            with open(TEMP_PATH_FOR_DATA, "a") as file:
-                                file.write(json.dumps({"url_xss": req.url, "method": "POST", "data": str(keys)}) + "\n")
-
-                    except Exception as e:
-                        Log.info(f"Connection Error with POST method for URL: {urljoin(url, action)} --> {e}")
-
-
+        except Exception as e:
+            Log.info("Internal error: " + str(e))
 

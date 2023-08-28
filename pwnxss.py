@@ -12,10 +12,7 @@ def start():
     Log.info("Starting PwnXSS...")
 
     if get_args.u:
-        if Core.check_connection(
-                url=get_args.u,
-                session_get=session_get
-        ):
+        if Core.check_connection(url=get_args.u, session_get=session_get):
             crawler = Crawler()
             crawler.crawl(
                 base=get_args.u,
